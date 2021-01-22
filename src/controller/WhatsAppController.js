@@ -139,7 +139,7 @@ class WhatsAppController
         });
 
         this.el.contactsMessagesList.querySelectorAll('.contact-item').forEach(item => {
-            item.on('click', e => {
+            item.on('click', () => {
                 this.el.home.hide();
                 this.el.main.css({
                     display: 'flex'
@@ -154,20 +154,95 @@ class WhatsAppController
         });
 
         this.el.btnAttachPhoto.on('click', () => {
-            console.log('photo')
+            this.el.inputPhoto.click();
         });
 
         this.el.btnAttachCamera.on('click', () => {
-            console.log('camera');
+            this.closeAllMainPanel();
+
+            this.el.panelCamera.addClass('open');
+            this.el.panelCamera.css({
+                'height':'calc(100% - 120px)'
+            });
         });
 
         this.el.btnAttachDocument.on('click', () => {
-            console.log('document');
+            this.closeAllMainPanel();
+            this.el.panelDocumentPreview.addClass('open');
+            this.el.panelDocumentPreview.css({
+                'height':'calc(100% - 120px)'
+            });
         });
 
         this.el.btnAttachContact.on('click', () => {
-            console.log('contact');
+            this.el.modalContacts.show();
         });
+
+        this.el.btnCloseModalContacts.on('click', e => {
+            this.el.modalContacts.hide();
+        })
+
+        this.el.inputPhoto.on('change', e => {
+            [...this.el.inputPhoto.files].forEach(file => {
+                console.log(file);
+            });
+        });
+
+        this.el.btnClosePanelCamera.on('click', e => {
+            this.closeAllLeftPanel();
+            this.el.panelMessagesContainer.show();
+        });
+
+        this.el.btnTakePicture.on('click', e => {
+            console.info('take picture');
+        });
+
+        this.el.btnClosePanelDocumentPreview.on('click', e => {
+            this.closeAllLeftPanel();
+            this.el.panelMessagesContainer.show();
+        });
+
+        this.el.btnSendDocument.on('click', e => {
+            console.info('send document');
+        });
+
+        this.el.btnSendMicrophone.on('click', e => {
+            this.el.recordMicrophone.show();
+            this.el.btnSendMicrophone.hide();
+
+            this.startRecordMicrophoneTime();
+        });
+
+        this.el.btnCancelMicrophone.on('click', e => {
+            this.closeRecordMicrophone();
+        });
+
+        this.el.btnFinishMicrophone.on('click', e => {
+            this.closeRecordMicrophone();
+        });
+    }
+
+    startRecordMicrophoneTime()
+    {
+        let start = Date.now();
+
+        this._recordMicrophoneInterval = setInterval(() => {
+            this.el.recordMicrophoneTimer.innerHTML = Format.toTime(Date.now() - start);
+        }, 100);
+    }
+
+    closeRecordMicrophone()
+    {
+        this.el.recordMicrophone.hide();
+        this.el.btnSendMicrophone.show();
+        clearInterval(this._recordMicrophoneInterval);
+    }
+
+    closeAllMainPanel()
+    {
+        this.el.panelMessagesContainer.hide();
+        this.el.panelDocumentPreview.removeClass('open');
+        this.el.panelCamera.removeClass('open');
     }
 
     closeMenuAttach(e)
