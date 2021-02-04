@@ -244,21 +244,50 @@ class WhatsAppController
             }
         });
 
-        this.el.btnSend.on('click', e => {
+        this.el.btnSend.on('click', () => {
             console.log(this.el.inputText.innerHTML);
         });
 
-        this.el.btnEmojis.on('click', e => {
+        this.el.btnEmojis.on('click', () => {
             this.el.panelEmojis.toggleClass('open').css({
                 'bottom': '-1.5px'
             });
         });
 
         this.el.panelEmojis.querySelectorAll('.emojik').forEach(emoji => {
-            emoji.on('click', e => {
-                console.log(emoji.dataset.unicode);
+            emoji.on('click', () => {
+                let img = this.el.imgEmojiDefault.cloneNode();
+
+                img.style.cssText = emoji.style.cssText;
+                img.dataset.unicode = emoji.dataset.unicode;
+                img.alt = emoji.dataset.unicode;
+
+                emoji.classList.forEach(name => {
+                    img.classList.add(name);
+                });
+
+                let cursor = window.getSelection();
+
+                if(!cursor.focusNode.id === 'input-text' || !cursor.focusNode)
+                {
+                    this.el.inputText.focus();
+                    cursor = window.getSelection();
+                }
+
+                let range = document.createRange();
+                range = cursor.getRangeAt(0);
+                range.deleteContents();
+
+                let frag = document.createDocumentFragment();
+
+                frag.appendChild(img);
+
+                range.insertNode(frag);
+                range.setStartAfter(img);
+                this.el.inputText.dispatchEvent(new Event('keyup'));
             });
         });
+
     }
 
     startRecordMicrophoneTime()
@@ -294,4 +323,6 @@ class WhatsAppController
         this.el.panelAddContact.hide();
         this.el.panelEditProfile.hide();
     }
+
+
 }
