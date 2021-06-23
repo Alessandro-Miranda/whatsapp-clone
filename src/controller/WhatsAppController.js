@@ -1,5 +1,6 @@
 import Format from './../utils/Format';
 import CameraController from './CameraController';
+import DocumentPreviewController from './DocumentPreviewController';
 
 export default class WhatsAppController
 {
@@ -162,8 +163,8 @@ export default class WhatsAppController
 
         this.el.btnAttachCamera.on('click', () => {
             this.closeAllMainPanel();
-
-            this.el.panelCamera.addClass('open');
+            
+            this.el.panelCamera.addClass('open').show();
             this.el.panelCamera.css({
                 'height':'calc(100% - 120px)'
             });
@@ -174,10 +175,50 @@ export default class WhatsAppController
         this.el.btnAttachDocument.on('click', () => {
             this.closeAllMainPanel();
             this.el.panelDocumentPreview.addClass('open');
+            this.el.panelDocumentPreview.show();
             this.el.panelDocumentPreview.css({
                 'height':'calc(100% - 120px)'
             });
+            this.el.inputDocument.click();
         });
+
+        this.el.inputDocument.on('change', e => {
+            if(this.el.inputDocument.files[0])
+            {
+                let file = this.el.inputDocument.files[0];
+                this._documentPreviewController = new DocumentPreviewController(file);
+                this._documentPreviewController.getPreviewData().then(data => {
+                    this.el.imgPanelDocumentPreview.src = data.src;
+                    this.el.infoPanelDocumentPreview.innerHTML = data.info;
+                    this.el.imagePanelDocumentPreview.show();
+                    this.el.filePanelDocumentPreview.hide();
+                }).catch(err => {
+                    switch(file.type)
+                    {
+                        case 'application/vnd.ms-excel':
+                        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                            this.el.iconPanelDocumentPreview.classList = 'jcxhw icon-doc-xls';
+                        break;
+
+                        case 'application/vnd.ms-powerpoint':
+                        case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+                            this.el.iconPanelDocumentPreview.classList = 'jcxhw icon-doc-ppt';
+                        break;
+
+                        case 'application/msword':
+                        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                            this.el.iconPanelDocumentPreview.classList = 'jcxhw icon-doc-doc';
+                        break;
+                            
+                        default:
+                            this.el.iconPanelDocumentPreview.classList = 'jcxhw icon-doc-generic';
+                    }
+                    this.el.filenamePanelDocumentPreview.innerHTML = file.name;
+                    this.el.imagePanelDocumentPreview.hide();
+                    this.el.filePanelDocumentPreview.show();
+                })
+            }
+        })
 
         this.el.btnAttachContact.on('click', () => {
             this.el.modalContacts.show();
@@ -200,12 +241,32 @@ export default class WhatsAppController
         });
 
         this.el.btnTakePicture.on('click', e => {
-            console.info('take picture');
+            let dataUrl = this._camera.takePicture();
+
+            this.el.pictureCamera.src = dataUrl;
+            this.el.pictureCamera.show();
+            this.el.videoCamera.hide();
+            this.el.btnReshootPanelCamera.show();
+            this.el.containerTakePicture.hide();
+            this.el.containerSendPicture.show();
+        });
+
+        this.el.btnReshootPanelCamera.on('click', e => {
+            
+            this.el.pictureCamera.hide();
+            this.el.videoCamera.show();
+            this.el.btnReshootPanelCamera.hide();
+            this.el.containerTakePicture.show();
+            this.el.containerSendPicture.hide();
         });
 
         this.el.btnClosePanelDocumentPreview.on('click', e => {
             this.closeAllLeftPanel();
             this.el.panelMessagesContainer.show();
+        });
+
+        this.el.btnSendPicture.on('click', e => {
+            console.log(this.el.pictureCamera.src);
         });
 
         this.el.btnSendDocument.on('click', e => {
@@ -328,6 +389,8 @@ export default class WhatsAppController
     {
         this.el.panelAddContact.hide();
         this.el.panelEditProfile.hide();
+        this.el.panelCamera.hide();
+        this.el.panelDocumentPreview.hide();
     }
 
 
