@@ -1,11 +1,23 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/app.js',
+    entry: {
+        app: './src/app.js',
+        'pdf.worker': 'pdfjs-dist/build/pdf.worker.entry.js'
+    },
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].bundle.js',
+        path: path.join(__dirname, 'dist'),
         publicPath: '/dist'
     },
-    mode: 'development'
+    mode: 'development',
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                enforce: 'pre',
+                use: ['source-map-loader']
+            }
+        ]
+    }
 }
