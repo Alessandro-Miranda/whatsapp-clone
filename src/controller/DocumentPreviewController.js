@@ -38,8 +38,31 @@ export default class DocumentPreviewController
 
                     reader.onload = e => {
                         pdfjslib.getDocument(new Uint8Array(reader.result)).promise.then(pdf => {
-                            console.log(pdf);
-                            resolve();
+                            pdf.getPage(1)
+                                .then(page => {
+                                    let viewport = page.getViewport({
+                                        scale: 1
+                                    });
+                                    let canvas = document.createElement('canvas');
+                                    let canvasContext = canvas.getContext('2d');
+
+                                    canvas.width = viewport.width;
+                                    canvas.height = viewport.height;
+
+                                    page.render({
+                                        canvasContext,
+                                        viewport
+                                    }).promise.then(() => {
+                                        resolve({
+                                            src: canvas.toDataURL('image/png'),
+                                            info: `${pdf.numPages} página${pdf.numPages > 1 ? 's' : ''}`
+                                        })
+                                    })
+                                        .catch(err => reject(err));
+                                })
+                                .catch(err => {
+                                    reject(err);
+                                });
                         }).catch(err => {
                             reject(err);
                         });
