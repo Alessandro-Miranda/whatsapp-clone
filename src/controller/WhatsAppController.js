@@ -177,7 +177,8 @@ export default class WhatsAppController
             this.el.panelDocumentPreview.addClass('open');
             this.el.panelDocumentPreview.show();
             this.el.panelDocumentPreview.css({
-                'height':'calc(100% - 120px)'
+                // 'height':'calc(100% - 120px)'
+                'height':'100%'
             });
             this.el.inputDocument.click();
         });
