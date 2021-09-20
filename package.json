@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Alessandro-Miranda/whatsapp-clone#readme",
   "dependencies": {
+    "firebase": "^9.0.2",
     "pdfjs-dist": "^2.8.335",
     "util": "^0.12.4",
     "webpack": "^5.24.2",
@@ -27,6 +28,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "devDependencies": {
+    "@types/firebase": "^3.2.1",
     "source-map-loader": "^3.0.0"
   }
 }
