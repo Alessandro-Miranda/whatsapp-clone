@@ -1,5 +1,6 @@
-const firebase = require('firebase');
-require('firebase/firestore');
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 export class Firebase
 {
@@ -21,9 +22,12 @@ export class Firebase
     {
         if(!this._initialized)
         {
-            firebase.initializeApp(this._config);
-            firebase.firestore().settings({
-                timestampsInSnapshots: true
+            this._app = initializeApp(this._config);
+            this._db = getFirestore(this._app);
+            this._storage = getStorage(this._app);
+            
+            this._db.settings({
+                timestampsInSnapshots: true,
             });
 
             this._initialized = true;
@@ -32,11 +36,11 @@ export class Firebase
 
     static db()
     {
-        return firebase.firestore();
+        return this._db;
     }
 
     static hd()
     {
-        return firebase.storage();
+        return this._storage
     }
 }
