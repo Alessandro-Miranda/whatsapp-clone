@@ -8,16 +8,6 @@ module.exports = {
     output: {
         filename: '[name].bundle.js',
         path: path.join(__dirname, 'dist'),
-        publicPath: '/dist'
-    },
-    mode: 'development',
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                enforce: 'pre',
-                use: ['source-map-loader']
-            }
-        ]
+        publicPath: 'dist'
     }
 }
