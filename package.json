@@ -1,12 +1,12 @@
 {
   "name": "whatsapp-clone",
   "version": "1.0.0",
-  "description": "whatsapp clone feito no curso de javascript da hcode treinamentos",
-  "main": "index.js",
+  "description": "WhatsApp clone feito durante o curso de JavaScript Completo da [HCODE treinamentos](https://github.com/hcodebr).",
+  "main": "webpack.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
-    "start": "webpack server"
+    "start": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
@@ -19,16 +19,12 @@
     "url": "https://github.com/Alessandro-Miranda/whatsapp-clone/issues"
   },
   "homepage": "https://github.com/Alessandro-Miranda/whatsapp-clone#readme",
-  "dependencies": {
-    "firebase": "^9.0.2",
-    "pdfjs-dist": "^2.8.335",
-    "util": "^0.12.4",
-    "webpack": "^5.24.2",
-    "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^3.11.2"
-  },
   "devDependencies": {
-    "@types/firebase": "^3.2.1",
-    "source-map-loader": "^3.0.0"
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.5.1"
+  },
+  "dependencies": {
+    "firebase": "^5.5.2",
+    "pdfjs-dist": "^2.0.489"
   }
 }
