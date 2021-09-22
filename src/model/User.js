@@ -44,4 +44,14 @@ export default class User extends Model
     {
         return User.getRef().doc(email);
     }
+
+    addContact(contact)
+    {
+        User
+            .getRef()
+            .doc(this.email)
+            .collection('contacts')
+            .doc(btoa(contact.email))
+            .set(contact.toJSON());
+    }
 }
