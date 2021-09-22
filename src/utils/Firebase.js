@@ -1,6 +1,5 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+const firebase = require('firebase/app');
+require('firebase/firestore');
 
 export class Firebase
 {
@@ -22,11 +21,9 @@ export class Firebase
     {
         if(!this._initialized)
         {
-            this._app = initializeApp(this._config);
-            this._db = getFirestore(this._app);
-            this._storage = getStorage(this._app);
+            firebase.initializeApp(this._config);
             
-            this._db.settings({
+            firebase.firestore().settings({
                 timestampsInSnapshots: true,
             });
 
