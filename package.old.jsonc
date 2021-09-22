@@ -1,0 +1,35 @@
+// Arquivo de dependências atualizadas (versão não utilizada durante o curso)
+{
+    "name": "whatsapp-clone",
+    "version": "1.0.0",
+    "description": "whatsapp clone feito no curso de javascript da hcode treinamentos",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "webpack --config webpack.config.js",
+        "start": "webpack server"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Alessandro-Miranda/whatsapp-clone.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Alessandro-Miranda/whatsapp-clone/issues"
+    },
+    "homepage": "https://github.com/Alessandro-Miranda/whatsapp-clone#readme",
+    "dependencies": {
+        "firebase": "^9.0.2",
+        "pdfjs-dist": "^2.8.335",
+        "util": "^0.12.4",
+        "webpack": "^5.24.2",
+        "webpack-cli": "^4.7.2",
+        "webpack-dev-server": "^3.11.2"
+    },
+    "devDependencies": {
+        "@types/firebase": "^3.2.1",
+        "source-map-loader": "^3.0.0"
+    }
+}
