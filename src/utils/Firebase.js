@@ -1,5 +1,6 @@
 const firebase = require('firebase/app');
 require('firebase/firestore');
+require('firebase/auth');
 
 export class Firebase
 {
@@ -19,25 +20,43 @@ export class Firebase
 
     init()
     {
-        if(!this._initialized)
+        if(!window._initializedFirebase)
         {
             firebase.initializeApp(this._config);
             
             firebase.firestore().settings({
-                timestampsInSnapshots: true,
+                timestampsInSnapshots: true
             });
 
-            this._initialized = true;
+            window._initializedFirebase = true;
         }
     }
 
     static db()
     {
-        return this._db;
+        return firebase.firestore();
     }
 
     static hd()
     {
-        return this._storage
+        return firebase.storage();
+    }
+
+    initAuth()
+    {
+        return new Promise((resolve, reject) => {
+            let provider = new firebase.auth.GoogleAuthProvider();
+
+            firebase.auth()
+                .signInWithPopup(provider)
+                .then(resp => {
+                    let token = resp.credential.accessToken;
+                    let user = resp.user;
+                    resolve({ user, token });
+                })
+                .catch(err => {
+                    reject(err);
+            });
+        });
     }
 }
