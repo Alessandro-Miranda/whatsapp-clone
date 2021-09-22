@@ -3,17 +3,58 @@ import CameraController from './CameraController';
 import MicrophoneController from './MicrophoneController';
 import DocumentPreviewController from './DocumentPreviewController';
 import { Firebase } from '../utils/Firebase';
+import User from '../model/User';
 
 export default class WhatsAppController
 {
     constructor()
     {
+        this._firebase = new Firebase();
+        this.initAuth();
         this.elementsPrototype();
         this.loadElements();
         this.initEvents();
-        this._firebase = new Firebase();
     }
 
+    initAuth()
+    {
+        this._firebase
+            .initAuth()
+            .then(({ user, token }) => {
+                this._user = new User(user.email);
+
+                this._user.on('datachange', data => {
+                    document.querySelector('title').innerHTML = data.name + '- WhatsApp clone';
+                    this.el.inputNamePanelEditProfile.innerHTML = data.name;
+
+                    if(data.photo)
+                    {
+                        let photo = this.el.imgPanelEditProfile;
+                        photo.src = data.photo;
+                        photo.show();
+                        this.el.imgDefaultPanelEditProfile.hide();
+
+                        let photo2 = this.el.myPhoto.querySelector('img');
+                        photo2.src = data.photo;
+                        photo2.show();
+                    }
+                });
+
+                this._user.name = user.displayName;
+                this._user.email = user.email;
+                this._user.photo = user.photoURL;
+
+                this._user.save().then(() => {
+                    this.el.appContent.css({
+                        display: 'flex'
+                    });
+                })
+
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
     loadElements()
     {
         this.el = {};
