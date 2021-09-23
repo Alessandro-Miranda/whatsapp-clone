@@ -52,7 +52,7 @@ export default class User extends Model
 
     addContact(contact)
     {
-        User
+        return User
             .getContactsRef(this.email)
             .doc(btoa(contact.email))
             .set(contact.toJSON());
