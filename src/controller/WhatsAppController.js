@@ -60,14 +60,16 @@ export default class WhatsAppController
 
     initContacts()
     {
-        let div = document.createElement('div');
+        this.el.contactsMessagesList.innerHTML = '';
 
         this._user.on('contactschange', docs => {
-            this.el.contactsMessagesList.innerHTML = '';
+
             docs.forEach(doc => {
-
+                console.log(doc.data())
+                
                 let contact = doc.data();
-
+                
+                let div = document.createElement('div');
                 div.className = 'contact-item'
                 div.innerHTML = `<div class="dIyEr">
                                     <div class="_1WliW" style="height: 49px; width: 49px;">
@@ -120,15 +122,30 @@ export default class WhatsAppController
                                     </div>
                                 </div>`;
 
-
                 if(contact.photo)
                 {
                     let img = div.querySelector('.photo');
                     img.src = contact.photo;
                     img.show();
-
                 }
-                this.elContactsMessageList.appendChild(div);
+
+                div.on('click', e => {
+                    this.el.activeName.innerHTML = contact.name;
+                    this.el.activeStatus.innerHTML = contact.status;
+
+                    if(contact.photo)
+                    {
+                        let photo = this.el.activePhoto;
+                        photo.src = contact.photo;
+                        photo.show();
+                    }
+
+                    this.el.home.hide();
+                    this.el.main.css({
+                        display: 'flex'
+                    });
+                });
+                this.el.contactsMessagesList.appendChild(div);
             });
         })
         this._user.getContacts();
