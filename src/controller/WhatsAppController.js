@@ -4,6 +4,7 @@ import MicrophoneController from './MicrophoneController';
 import DocumentPreviewController from './DocumentPreviewController';
 import { Firebase } from '../utils/Firebase';
 import User from '../model/User';
+import Chat from '../model/Chat';
 
 export default class WhatsAppController
 {
@@ -60,12 +61,11 @@ export default class WhatsAppController
 
     initContacts()
     {
-        this.el.contactsMessagesList.innerHTML = '';
-
+        
         this._user.on('contactschange', docs => {
+            this.el.contactsMessagesList.innerHTML = '';
 
             docs.forEach(doc => {
-                console.log(doc.data())
                 
                 let contact = doc.data();
                 
@@ -289,9 +289,17 @@ export default class WhatsAppController
             contact.on('datachange', data => {
                 if(data.name)
                 {
-                    this._user.addContact(contact).then(() => {
-                        console.info("Contato adicionado");
-                        this.el.btnClosePanelAddContact.click();
+                    Chat.createIfNotExists(this._user.email, contact.email).then(chat => {
+                        contact.chatId = chat.id;
+
+                        this._user.chatId = chat.id;
+
+                        contact.addContact(this._user);
+                        
+                        this._user.addContact(contact).then(() => {
+                            console.info("Contato adicionado");
+                            this.el.btnClosePanelAddContact.click();
+                        });
                     });
                 }
                 else
