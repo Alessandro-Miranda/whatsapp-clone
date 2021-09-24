@@ -20,6 +20,9 @@ export default class User extends Model
     get photo(){ return this._data.photo; }
     set photo(photo){ this._data.photo = photo }
 
+    get chatId(){ return this._data.chatId; }
+    set chatId(chatId){ this._data.chatId = chatId }
+
     getById(id)
     {
         return new Promise((resolve, reject) => {
