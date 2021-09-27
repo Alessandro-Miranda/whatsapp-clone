@@ -1,4 +1,5 @@
 import { Firebase } from "../utils/Firebase";
+import Format from "../utils/Format";
 import Model from "./Model";
 
 export default class Message extends Model
@@ -20,6 +21,9 @@ export default class Message extends Model
 
     get status(){ return this._data.status; }
     set status(value){ this._data.status = value; }
+    
+    get id(){ return this._data.id; }
+    set id(value){ this._data.id = value; }
 
     getViewElement(me = true)
     {
@@ -286,16 +290,16 @@ export default class Message extends Model
 
             default:
                 div.innerHTML = `
-                    <div class="font-style _3DFk6 tail">
+                    <div class="font-style _3DFk6 tail" id="_${this.id}">
                         <span class="tail-container"></span>
                         <span class="tail-container highlight"></span>
                         <div class="Tkt2p">
                             <div class="_3zb-j ZhF0n">
-                                <span dir="ltr" class="selectable-text invisible-space message-text">Oi!</span>
+                                <span dir="ltr" class="selectable-text invisible-space message-text">${this.content}</span>
                             </div>
                             <div class="_2f-RV">
                                 <div class="_1DZAH">
-                                    <span class="msg-time">11:33</span>
+                                    <span class="msg-time">${Format.timestampToTime(this.timestamp)}</span>
                                 </div>
                             </div>
                         </div>
