@@ -24,4 +24,16 @@ export default class Format
             return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
     }
+
+    static datateToTime(date, locale = 'pt-BR')
+    {
+        return date.toLocaleTimeString(this._locale, {
+            hours: '2-digit',
+            minutes: '2-digit'
+        });
+    }
+    static timestampToTime(timestamp)
+    {
+        return (timestamp && typeof timestamp.toDate === 'function') ? Format.datateToTime(timestamp.toDate()) : '';
+    }
 }
