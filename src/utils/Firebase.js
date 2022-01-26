@@ -1,4 +1,5 @@
 const firebase = require('firebase/app');
+require('firebase/firebase-storage');
 require('firebase/firestore');
 require('firebase/auth');
 
